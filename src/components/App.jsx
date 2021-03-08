@@ -3,8 +3,8 @@ import "../css/App.css";
 import data from "../sample_data.json";
 
 function App() {
-  let qnum = 0;
-
+  let [qnum, setqnum] = useState(0);
+  console.log(data[qnum]);
   // function clickForAnswer() {
   //   return <div>{data[qnum].question.choices[3]}</div>;
   // }
@@ -25,8 +25,15 @@ function App() {
         Click for the Correct Answer
       </button> */}
       {/* <Reveal question={data[qnum].question.correct_choice_index} /> */}
-      <NextQuestion />
-      <Reveal />
+      {/* <NextQuestion q={setqnum(qnum + 1)} /> */}
+
+      <NextQuestion q={() => setqnum(qnum + 1)} />
+      {/* setqnum(qnum+1) */}
+      <Reveal
+        answer={
+          data[qnum].question.choices[data[qnum].question.correct_choice_index]
+        }
+      />
     </div>
   );
 }
@@ -49,7 +56,7 @@ function NextQuestion(props) {
   let [isAnswered, setIsAnswered] = useState(false);
   return (
     <div>
-      <button onClick={() => setIsAnswered(true)}>Next</button>
+      <button onClick={() => props.q()}>Next</button>
     </div>
   );
 }
@@ -61,11 +68,7 @@ function Reveal(props) {
       <button onClick={() => setIsReveal(true)}>
         Click for correct answer
       </button>
-      <p>
-        {isReveal
-          ? "The Answer is " + data[qnum].question.correct_choice_index
-          : ""}
-      </p>
+      <p>{isReveal ? "The correct answer is: " + props.answer + "" : ""}</p>
     </div>
   );
 }
@@ -78,3 +81,11 @@ function Reveal(props) {
 export default App;
 
 //
+
+{
+  /* <p>
+{isReveal
+  ? "The Answer is " + data[qnum].question.correct_choice_index
+  : ""}
+</p> */
+}
